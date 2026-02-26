@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#060F18">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Ventara — Outdoor Booking Manager</title>
+  <meta name="description" content="Professionelle Buchungsverwaltung für Outdoor-Aktivitäten. Kalender, SMS, Team & Equipment. DSGVO-konform und offline-fähig.">
+  <meta name="keywords" content="outdoor, booking, guide, paragliding, rafting, diving, balloon, tour, activity, calendar, SMS">
+  <meta name="author" content="Ventara">
+  <meta property="og:title" content="Ventara — Outdoor Booking Manager">
+  <meta property="og:description" content="Professionelle Buchungsverwaltung für Outdoor-Aktivitäten. 6 Aktivitätstypen, DSGVO-konform, offline-fähig.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ventara.at">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       CSS CUSTOM PROPERTIES
+       ============================================ */
+    :root {
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+      /* Brand Colors */
+      --cyan-400: #22d3ee;
+      --cyan-500: #06b6d4;
+      --cyan-600: #0891b2;
+      --cyan-700: #0e7490;
+
+      /* Transition */
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Theme (default) */
+    [data-theme="dark"] {
+      --bg-primary: #060F18;
+      --bg-secondary: #0B1A2A;
+      --bg-card: #0F2132;
+      --bg-card-hover: #132B3F;
+      --bg-glass: rgba(11, 26, 42, 0.8);
+      --border: rgba(6, 182, 212, 0.12);
+      --border-hover: rgba(6, 182, 212, 0.3);
+      --text-primary: #F1F5F9;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --accent: var(--cyan-500);
+      --accent-glow: rgba(6, 182, 212, 0.15);
+      --accent-glow-strong: rgba(6, 182, 212, 0.25);
+      --gradient-hero: linear-gradient(180deg, #060F18 0%, #0C2D42 40%, #0B2A3C 70%, #060F18 100%);
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 40px rgba(6, 182, 212, 0.1);
+    }
+
+    /* Light Theme */
+    [data-theme="light"] {
+      --bg-primary: #FAFBFC;
+      --bg-secondary: #F1F5F9;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #F8FAFC;
+      --bg-glass: rgba(255, 255, 255, 0.8);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(6, 182, 212, 0.4);
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: var(--cyan-600);
+      --accent-glow: rgba(6, 182, 212, 0.08);
+      --accent-glow-strong: rgba(6, 182, 212, 0.15);
+      --gradient-hero: linear-gradient(180deg, #FAFBFC 0%, #E0F7FA 50%, #F1F5F9 100%);
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-glow: 0 0 40px rgba(6, 182, 212, 0.06);
+    }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background var(--transition), color var(--transition);
+      /* Safe area for iPhone notch */
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
+    a:hover { color: var(--cyan-400); }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* ============================================
+       UTILITY
+       ============================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* Scroll reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ============================================
+       NAVIGATION
+       ============================================ */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      padding-top: max(16px, env(safe-area-inset-top));
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition), border var(--transition), padding var(--transition);
+    }
+
+    .navbar.scrolled {
+      padding: 10px 0;
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+    }
+
+    .nav-brand .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all var(--transition);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .mobile-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-primary);
+      z-index: 999;
+      padding: 80px 24px 24px;
+      padding-top: max(80px, calc(env(safe-area-inset-top) + 60px));
+      padding-bottom: env(safe-area-inset-bottom);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav a {
+      display: block;
+      padding: 16px 0;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-nav-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 28px;
+    }
+
+    /* ============================================
+       BUTTONS
+       ============================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 182, 212, 0.4);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--border-hover);
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent-glow-strong);
+      transform: translateY(-2px);
+      color: var(--accent);
+    }
+
+    .btn-sm {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      border-radius: 10px;
+    }
+
+    /* ============================================
+       SECTION STYLES
+       ============================================ */
+    section {
+      padding: 80px 0;
+    }
+
+    .section-label {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border: 1px solid rgba(6, 182, 212, 0.15);
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    /* ============================================
+       HERO
+       ============================================ */
+    .hero {
+      display: flex;
+      align-items: center;
+      background: var(--gradient-hero);
+      position: relative;
+      overflow: hidden;
+      padding: 100px 0 60px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(6, 182, 212, 0.15);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan-500);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5.5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-description {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 36px;
+      max-width: 500px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+    }
+
+    .hero-stat {
+      text-align: left;
+    }
+
+    .hero-stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Phone Mockup */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .phone-mockup {
+      width: 280px;
+      height: 580px;
+      border-radius: 40px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        var(--shadow-card),
+        var(--shadow-glow),
+        0 0 80px rgba(6, 182, 212, 0.06);
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 30px;
+      background: var(--bg-primary);
+      border-radius: 0 0 20px 20px;
+      z-index: 2;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #0B2A3C 0%, #061621 100%);
+      display: flex;
+      flex-direction: column;
+      padding: 48px 20px 20px;
+      gap: 12px;
+    }
+
+    .screen-header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .screen-header h3 {
+      color: #E5E7EB;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .screen-header p {
+      color: #64748B;
+      font-size: 11px;
+    }
+
+    .screen-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .screen-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .screen-card-text h4 {
+      color: #E5E7EB;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .screen-card-text p {
+      color: #64748B;
+      font-size: 10px;
+    }
+
+    .screen-card-badge {
+      margin-left: auto;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    /* Floating elements */
+    .float-card {
+      position: absolute;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow-card);
+      animation: float 6s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .float-card-1 {
+      top: 60px;
+      right: -20px;
+      animation-delay: 0s;
+    }
+
+    .float-card-2 {
+      bottom: 80px;
+      left: -30px;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .float-card-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .float-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .float-card-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .float-card-sub {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* ============================================
+       ACTIVITY TYPES BAR
+       ============================================ */
+    .activities-bar {
+      padding: 28px 0;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activities-bar .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .activity-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 100px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all var(--transition);
+    }
+
+    .activity-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    .activity-chip .emoji {
+      font-size: 1.2rem;
+    }
+
+    /* ============================================
+       FEATURES
+       ============================================ */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan-500), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(6, 182, 212, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ============================================
+       HOW IT WORKS
+       ============================================ */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 48px;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--border), var(--accent), var(--border));
+      opacity: 0.4;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+    }
+
+    .step-number {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .step h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    /* ============================================
+       TESTIMONIALS
+       ============================================ */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all var(--transition);
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .testimonial-stars {
+      color: #f59e0b;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .testimonial-role {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ============================================
+       PRICING
+       ============================================ */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      text-align: center;
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow), 0 0 60px rgba(6, 182, 212, 0.08);
+    }
+
+    .pricing-card.featured::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan-400), var(--cyan-600));
+      border-radius: 24px 24px 0 0;
+    }
+
+    .pricing-badge {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+
+    .pricing-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .pricing-description {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+
+    .pricing-price {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+
+    .pricing-price .currency {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .pricing-period {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features li {
+      padding: 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-features .check {
+      color: var(--cyan-500);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .pricing-features .cross {
+      color: var(--text-muted);
+      font-size: 1rem;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .pricing-card .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ============================================
+       FAQ
+       ============================================ */
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+
+    .faq-item.open {
+      border-color: var(--border-hover);
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 20px 24px;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: color var(--transition);
+    }
+
+    .faq-question:hover {
+      color: var(--accent);
+    }
+
+    .faq-icon {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      transition: transform var(--transition);
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      color: var(--accent);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+    }
+
+    .faq-answer-inner {
+      padding: 0 24px 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* ============================================
+       CTA BANNER
+       ============================================ */
+    .cta-banner {
+      background: linear-gradient(135deg, #0B2A3C, #061621);
+      border-radius: 28px;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(6, 182, 212, 0.15);
+    }
+
+    [data-theme="light"] .cta-banner {
+      background: linear-gradient(135deg, #0B2A3C, #0e3a52);
+      color: #F1F5F9;
+    }
+
+    [data-theme="light"] .cta-banner .section-subtitle {
+      color: #94A3B8;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .cta-banner .section-title,
+    .cta-banner .section-subtitle {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-stores {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+      position: relative;
+      z-index: 1;
+      flex-wrap: wrap;
+    }
+
+    .store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #F1F5F9;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+
+    .store-badge:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    .store-badge .store-icon {
+      font-size: 1.4rem;
+    }
+
+    .store-badge-text {
+      text-align: left;
+      line-height: 1.2;
+    }
+
+    .store-badge-text small {
+      font-size: 0.65rem;
+      font-weight: 400;
+      opacity: 0.7;
+      display: block;
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    footer {
+      padding: 60px 0 30px;
+      padding-bottom: max(30px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col a {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: color var(--transition);
+    }
+
+    .footer-col a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .footer-social a {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 1rem;
+      transition: all var(--transition);
+    }
+
+    .footer-social a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    /* ---- Tablet ---- */
+    @media (max-width: 1024px) {
+      .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-description { margin: 0 auto 28px; }
+      .hero-ctas { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-visual { margin-top: 32px; }
+
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ---- Mobile ---- */
+    @media (max-width: 768px) {
+      section { padding: 48px 0; }
+
+      .nav-links { display: none; }
+      .mobile-toggle { display: flex; }
+
+      /* Hero: compact, no excessive space */
+      .hero {
+        padding: 80px 0 36px;
+      }
+      .hero::before { width: 350px; height: 350px; top: 5%; }
+      .hero-badge { margin-bottom: 16px; }
+      .hero-title { font-size: clamp(1.8rem, 7vw, 2.5rem); margin-bottom: 16px; }
+      .hero-description { font-size: 0.95rem; margin-bottom: 24px; line-height: 1.6; }
+      .hero-ctas { margin-bottom: 28px; }
+      .hero-stats { flex-direction: row; gap: 20px; flex-wrap: wrap; justify-content: center; }
+      .hero-stat-value { font-size: 1.1rem; }
+      .hero-stat-label { font-size: 0.7rem; }
+
+      /* Phone mockup: compact */
+      .hero-visual { margin-top: 20px; }
+      .phone-mockup { width: 200px; height: 420px; border-radius: 32px; }
+      .phone-screen { padding: 40px 14px 14px; gap: 8px; }
+      .phone-notch { width: 120px; height: 26px; }
+      .screen-header h3 { font-size: 12px; }
+      .screen-header p { font-size: 10px; }
+      .screen-card { padding: 8px; gap: 8px; }
+      .screen-card-icon { width: 28px; height: 28px; font-size: 13px; }
+      .screen-card-text h4 { font-size: 10px; }
+      .screen-card-text p { font-size: 8px; }
+      .screen-card-badge { padding: 2px 6px; font-size: 8px; }
+      .float-card { display: none; }
+
+      /* Activities bar: horizontal scroll */
+      .activities-bar { padding: 16px 0; overflow: hidden; }
+      .activities-bar .container {
+        flex-wrap: nowrap; justify-content: flex-start; gap: 8px;
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; padding-bottom: 4px;
+      }
+      .activities-bar .container::-webkit-scrollbar { display: none; }
+      .activity-chip { padding: 8px 14px; font-size: 0.8rem; white-space: nowrap; flex-shrink: 0; }
+
+      /* Features: compact single column */
+      .features-grid { grid-template-columns: 1fr; gap: 12px; }
+      .feature-card { padding: 20px; border-radius: 16px; }
+      .feature-icon { width: 40px; height: 40px; font-size: 18px; margin-bottom: 12px; border-radius: 10px; }
+      .feature-card h3 { font-size: 1rem; margin-bottom: 6px; }
+      .feature-card p { font-size: 0.85rem; line-height: 1.5; }
+
+      /* Steps: compact single column, no line */
+      .steps { grid-template-columns: 1fr; gap: 24px; }
+      .steps::before { display: none; }
+      .step-number { width: 48px; height: 48px; font-size: 1.1rem; margin-bottom: 12px; border-radius: 14px; }
+      .step-icon { font-size: 1.6rem; margin-bottom: 8px; }
+      .step h3 { font-size: 1rem; margin-bottom: 6px; }
+      .step p { font-size: 0.85rem; }
+
+      /* Testimonials + pricing: single column */
+      .testimonials-grid { grid-template-columns: 1fr; gap: 12px; }
+      .testimonial-card { padding: 20px; border-radius: 16px; }
+      .testimonial-stars { margin-bottom: 10px; }
+      .testimonial-text { font-size: 0.9rem; margin-bottom: 14px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 100%; margin: 0 auto; gap: 16px; }
+      .pricing-card { padding: 24px 20px; border-radius: 18px; }
+      .pricing-price { font-size: 2.5rem; }
+
+      /* FAQ */
+      .faq-question { padding: 14px 18px; font-size: 0.9rem; }
+      .faq-answer-inner { padding: 0 18px 14px; font-size: 0.85rem; }
+      .faq-item { border-radius: 12px; }
+
+      /* CTA */
+      .cta-banner { padding: 36px 20px; border-radius: 18px; }
+      .cta-banner .section-title { font-size: clamp(1.4rem, 5.5vw, 1.8rem); }
+      .cta-stores { margin-top: 24px; }
+
+      /* Footer */
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      footer { padding: 36px 0 20px; }
+
+      /* Section headers tighter */
+      .section-header { margin-bottom: 32px; }
+      .section-title { font-size: clamp(1.5rem, 5.5vw, 2rem); }
+      .section-subtitle { font-size: 0.9rem; }
+    }
+
+    /* ---- Small phones ---- */
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+
+      section { padding: 36px 0; }
+
+      .hero { padding: 72px 0 28px; }
+      .hero::before { width: 280px; height: 280px; }
+      .hero-title { font-size: 1.6rem; margin-bottom: 12px; }
+      .hero-description { font-size: 0.85rem; margin-bottom: 20px; }
+      .hero-badge { font-size: 0.72rem; padding: 5px 10px; margin-bottom: 12px; }
+      .hero-ctas { flex-direction: column; align-items: stretch; gap: 8px; margin-bottom: 20px; }
+      .hero-ctas .btn { justify-content: center; padding: 12px 20px; }
+      .hero-stats { gap: 12px; }
+      .hero-stat-value { font-size: 1rem; }
+
+      /* Phone mockup: even smaller */
+      .hero-visual { margin-top: 16px; }
+      .phone-mockup { width: 170px; height: 360px; border-radius: 28px; }
+      .phone-screen { padding: 36px 12px 12px; gap: 6px; }
+      .phone-notch { width: 100px; height: 22px; }
+      .screen-header { margin-bottom: 4px; }
+      .screen-card-icon { width: 24px; height: 24px; font-size: 11px; border-radius: 7px; }
+
+      .nav-brand { font-size: 1rem; }
+      .nav-brand .logo-icon { width: 30px; height: 30px; font-size: 14px; border-radius: 8px; }
+      .btn-sm { padding: 8px 14px; font-size: 0.8rem; }
+
+      .cta-stores { flex-direction: column; align-items: stretch; }
+      .store-badge { justify-content: center; padding: 12px 20px; }
+
+      .section-label { font-size: 0.68rem; padding: 4px 10px; }
+      .section-header { margin-bottom: 24px; }
+
+      .feature-card { padding: 16px; }
+      .feature-card p, .step p, .testimonial-text { font-size: 0.82rem; }
+
+      /* Footer compact */
+      .footer-grid { grid-template-columns: 1fr; gap: 20px; }
+      footer { padding: 28px 0 16px; }
+      .footer-grid { margin-bottom: 20px; }
+    }
+
+    /* ---- Fix touch targets for mobile ---- */
+    @media (hover: none) and (pointer: coarse) {
+      .btn { min-height: 48px; }
+      .theme-toggle { min-width: 44px; min-height: 44px; }
+      .faq-question { min-height: 48px; }
+      .nav-links a { padding: 8px 4px; }
+      .mobile-nav a { min-height: 48px; display: flex; align-items: center; }
+    }
+
+    /* ---- Landscape phones ---- */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .hero { padding: 70px 0 30px; }
+      .hero .container { grid-template-columns: 1fr 1fr; text-align: left; }
+      .hero-ctas { justify-content: flex-start; }
+      .hero-stats { justify-content: flex-start; }
+      .hero-visual { margin-top: 0; }
+      .phone-mockup { width: 140px; height: 300px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav class="navbar" role="navigation" aria-label="Hauptnavigation">
+    <div class="container">
+      <a href="#" class="nav-brand" aria-label="Ventara - Startseite">
+        <span class="logo-icon" aria-hidden="true">V</span>
+        Ventara
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">So funktioniert's</a></li>
+        <li><a href="#testimonials">Bewertungen</a></li>
+        <li><a href="#pricing">Preise</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln">
+          <span id="themeIcon">&#9790;</span>
+        </button>
+        <a href="#cta" class="btn btn-primary btn-sm">Jetzt starten</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menü öffnen" aria-expanded="false">
+          &#9776;
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav" role="dialog" aria-label="Mobile Navigation">
+    <button class="mobile-nav-close" id="mobileClose" aria-label="Menü schließen">&times;</button>
+    <a href="#features" onclick="closeMobileNav()">Features</a>
+    <a href="#how-it-works" onclick="closeMobileNav()">So funktioniert's</a>
+    <a href="#testimonials" onclick="closeMobileNav()">Bewertungen</a>
+    <a href="#pricing" onclick="closeMobileNav()">Preise</a>
+    <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+    <a href="#cta" class="btn btn-primary" onclick="closeMobileNav()" style="margin-top: 20px; justify-content: center;">Jetzt starten</a>
+  </div>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="dot" aria-hidden="true"></span>
+          Jetzt verfügbar für iOS & Android
+        </div>
+
+        <h1 class="hero-title">
+          Deine Outdoor-<br>Buchungen.<br>
+          <span class="highlight">Einfach verwaltet.</span>
+        </h1>
+
+        <p class="hero-description">
+          Ventara ist die professionelle App für Outdoor-Anbieter. Verwalte Buchungen, Kunden, Guides und Equipment — alles an einem Ort, auch offline.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#cta" class="btn btn-primary">
+            <span aria-hidden="true">&#10148;</span>
+            Kostenlos testen
+          </a>
+          <a href="#features" class="btn btn-secondary">
+            Mehr erfahren
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-value">6</div>
+            <div class="hero-stat-label">Aktivitätstypen</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">100%</div>
+            <div class="hero-stat-label">DSGVO-konform</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">7 Tage</div>
+            <div class="hero-stat-label">Offline-Nutzung</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <!-- Floating card 1 -->
+        <div class="float-card float-card-1">
+          <div class="float-card-row">
+            <div class="float-card-icon" style="background: rgba(34, 197, 94, 0.15);">&#9745;</div>
+            <div>
+              <div class="float-card-label">Buchung bestätigt</div>
+              <div class="float-card-sub">SMS gesendet</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone mockup -->
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="screen-header">
+              <h3>Ventara</h3>
+              <p>3 Buchungen heute</p>
+            </div>
+
+            <div class="screen-card">
+              <div class="screen-card-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4;">&#9730;</div>
+              <div class="screen-card-text">
+                <h4>Familie Huber</h4>
+                <p>09:00 &middot; 4 Pers. &middot; Morgenfahrt</p>
+              </div>
+              <div class="screen-card-badge" style="background: rgba(34, 197, 94, 0.15); color: #22c55e;">&#10003;</div>
+            </div>
+
+            <div class="screen-card">
+              <div class="screen-card-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">&#9733;</div>
+              <div class="screen-card-text">
+                <h4>Max Bauer</h4>
+                <p>09:00 &middot; 2 Pers. &middot; VIP</p>
+              </div>
+              <div class="screen-card-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">VIP</div>
+            </div>
+
+            <div class="screen-card">
+              <div class="screen-card-icon" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">&#9993;</div>
+              <div class="screen-card-text">
+                <h4>Lisa Meier</h4>
+                <p>17:30 &middot; 6 Pers. &middot; Gutschein</p>
+              </div>
+              <div class="screen-card-badge" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">&#9993;</div>
+            </div>
+
+            <div class="screen-card" style="border-color: rgba(6, 182, 212, 0.2);">
+              <div class="screen-card-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4;">+</div>
+              <div class="screen-card-text">
+                <h4 style="color: #06b6d4;">Neue Buchung</h4>
+                <p>Jetzt anlegen</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating card 2 -->
+        <div class="float-card float-card-2">
+          <div class="float-card-row">
+            <div class="float-card-icon" style="background: rgba(6, 182, 212, 0.15);">&#9729;</div>
+            <div>
+              <div class="float-card-label">Wetter: klar</div>
+              <div class="float-card-sub">Alle Termine OK</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ACTIVITY TYPES BAR ==================== -->
+  <div class="activities-bar reveal">
+    <div class="container">
+      <div class="activity-chip"><span class="emoji" aria-hidden="true">&#127880;</span> Ballonfahrt</div>
+      <div class="activity-chip"><span class="emoji" aria-hidden="true">&#129666;</span> Paragliding</div>
+      <div class="activity-chip"><span class="emoji" aria-hidden="true">&#128675;</span> Rafting</div>
+      <div class="activity-chip"><span class="emoji" aria-hidden="true">&#129343;</span> Tauchen</div>
+      <div class="activity-chip"><span class="emoji" aria-hidden="true">&#128014;</span> Reiten</div>
+      <div class="activity-chip"><span class="emoji" aria-hidden="true">&#127956;</span> Outdoor</div>
+    </div>
+  </div>
+
+  <!-- ==================== FEATURES ==================== -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Features</span>
+        <h2 class="section-title">Alles was du brauchst.<br>In einer App.</h2>
+        <p class="section-subtitle">
+          Von der Buchung bis zur SMS-Bestätigung — Ventara gibt dir die Werkzeuge, um dein Outdoor-Business professionell zu managen.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon" aria-hidden="true">&#128197;</div>
+          <h3>Kalender-Integration</h3>
+          <p>Automatische Synchronisation mit deinem Gerätekalender. Morgen- und Abendtermine, Ersatzdaten und wetterbedingte Stornierungen — alles auf einen Blick.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon" aria-hidden="true">&#128101;</div>
+          <h3>Kunden & Buchungen</h3>
+          <p>Vollständige Kundenverwaltung mit Kontaktdaten, Gutscheinen, Zahlungsstatus und Teilnehmerzahl. Buchungen archivieren und per Excel sichern.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon" aria-hidden="true">&#127919;</div>
+          <h3>Equipment & Guides</h3>
+          <p>Verwalte dein Equipment mit Kapazität und Farbcodierung. Weise Guides zu, berechne Sonnenzeiten und organisiere Startorte.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon" aria-hidden="true">&#128172;</div>
+          <h3>SMS & WhatsApp</h3>
+          <p>Versende Bestätigungen und Erinnerungen direkt aus der App. Anpassbare Vorlagen pro Aktivitätstyp und automatische Wetterabsagen.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon" aria-hidden="true">&#128274;</div>
+          <h3>DSGVO-konform</h3>
+          <p>Keine Tracker, keine Werbung, keine Analytics. Verschlüsselte Datenübertragung, EU-Hosting und vollständige Datenexport- und Löschmöglichkeit.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon" aria-hidden="true">&#128246;</div>
+          <h3>Offline-fähig</h3>
+          <p>Bis zu 7 Tage ohne Internetverbindung nutzbar. Automatische Synchronisation sobald du wieder online bist. Perfekt fürs Gelände.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HOW IT WORKS ==================== -->
+  <section id="how-it-works" style="background: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">So funktioniert's</span>
+        <h2 class="section-title">In 3 Schritten startklar</h2>
+        <p class="section-subtitle">
+          Kein kompliziertes Setup. Lade die App herunter, wähle deine Aktivität und starte sofort mit der Verwaltung.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-number">1</div>
+          <div class="step-icon" aria-hidden="true">&#128241;</div>
+          <h3>App herunterladen</h3>
+          <p>Lade Ventara kostenlos aus dem App Store oder Google Play herunter. Erstelle in Sekunden einen Account.</p>
+        </div>
+
+        <div class="step reveal reveal-delay-2">
+          <div class="step-number">2</div>
+          <div class="step-icon" aria-hidden="true">&#127968;</div>
+          <h3>Aktivität wählen</h3>
+          <p>Wähle deinen Aktivitätstyp — Ballonfahrt, Paragliding, Rafting, Tauchen, Reiten oder Sonstiges. Alle Labels passen sich automatisch an.</p>
+        </div>
+
+        <div class="step reveal reveal-delay-3">
+          <div class="step-number">3</div>
+          <div class="step-icon" aria-hidden="true">&#128640;</div>
+          <h3>Loslegen</h3>
+          <p>Erfasse Equipment, Guides und Buchungen. Versende SMS-Bestätigungen und synchronisiere mit deinem Kalender.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TESTIMONIALS ==================== -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Bewertungen</span>
+        <h2 class="section-title">Das sagen unsere Nutzer</h2>
+        <p class="section-subtitle">
+          Outdoor-Anbieter aus ganz Österreich und Deutschland vertrauen auf Ventara.
+        </p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal reveal-delay-1">
+          <div class="testimonial-stars" aria-label="5 von 5 Sternen">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">
+            "Endlich eine App die versteht, was wir Ballonpiloten brauchen. Die Wetterabsage-Funktion per SMS spart uns enorm viel Zeit."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" aria-hidden="true">MK</div>
+            <div>
+              <div class="testimonial-name">Markus K.</div>
+              <div class="testimonial-role">Ballonpilot, Niederösterreich</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal reveal-delay-2">
+          <div class="testimonial-stars" aria-label="5 von 5 Sternen">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">
+            "Wir nutzen Ventara für unsere Rafting-Touren. Die Gutscheinverwaltung und der Excel-Export sind Gold wert für unsere Buchhaltung."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" aria-hidden="true">SW</div>
+            <div>
+              <div class="testimonial-name">Stefan W.</div>
+              <div class="testimonial-role">Rafting-Guide, Salzburg</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal reveal-delay-3">
+          <div class="testimonial-stars" aria-label="5 von 5 Sternen">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">
+            "Einfach, schnell, offline nutzbar. Genau das was ich als Reitschule für meine Terminverwaltung gesucht habe. Sehr empfehlenswert!"
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" aria-hidden="true">AH</div>
+            <div>
+              <div class="testimonial-name">Anna H.</div>
+              <div class="testimonial-role">Reitlehrerin, Bayern</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRICING ==================== -->
+  <section id="pricing" style="background: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Preise</span>
+        <h2 class="section-title">Einfach und transparent</h2>
+        <p class="section-subtitle">
+          Starte kostenlos und upgrade wenn dein Business wächst. Keine versteckten Kosten.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free Plan -->
+        <div class="pricing-card reveal reveal-delay-1">
+          <div class="pricing-name">Free</div>
+          <div class="pricing-description">Perfekt zum Kennenlernen</div>
+          <div class="pricing-price"><span class="currency">&euro;</span>0</div>
+          <div class="pricing-period">Kostenlos, für immer</div>
+          <ul class="pricing-features">
+            <li><span class="check" aria-hidden="true">&#10003;</span> Bis zu 5 Buchungen</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> 1 Equipment</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> Kalender-Synchronisation</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> Offline-Nutzung</li>
+            <li><span class="cross" aria-hidden="true">&#10007;</span> SMS & WhatsApp</li>
+            <li><span class="cross" aria-hidden="true">&#10007;</span> Excel Export/Import</li>
+            <li><span class="cross" aria-hidden="true">&#10007;</span> Automatische Erinnerungen</li>
+          </ul>
+          <a href="#cta" class="btn btn-secondary">Kostenlos starten</a>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="pricing-card featured reveal reveal-delay-2">
+          <div class="pricing-badge">Beliebt</div>
+          <div class="pricing-name">Pro</div>
+          <div class="pricing-description">Für professionelle Anbieter</div>
+          <div class="pricing-price"><span class="currency">&euro;</span>24,99</div>
+          <div class="pricing-period">/Monat &middot; oder &euro;199/Jahr <span style="color: var(--cyan-500); font-weight: 600;">(33% sparen)</span></div>
+          <ul class="pricing-features">
+            <li><span class="check" aria-hidden="true">&#10003;</span> Unbegrenzte Buchungen</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> Unbegrenzt Equipment</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> Kalender-Synchronisation</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> Offline-Nutzung</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> SMS & WhatsApp</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> Excel Export/Import</li>
+            <li><span class="check" aria-hidden="true">&#10003;</span> Automatische Erinnerungen</li>
+          </ul>
+          <a href="#cta" class="btn btn-primary">Pro freischalten</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ==================== -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Häufige Fragen</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item reveal reveal-delay-1">
+          <button class="faq-question" aria-expanded="false">
+            Welche Aktivitätstypen werden unterstützt?
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Ventara unterstützt 6 Aktivitätstypen: Ballonfahrt, Paragliding, Rafting, Tauchen, Reiten und eine generische Option für alle anderen Outdoor-Aktivitäten. Alle Labels, Icons und SMS-Vorlagen passen sich automatisch an deinen Typ an.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-2">
+          <button class="faq-question" aria-expanded="false">
+            Funktioniert die App auch ohne Internet?
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Ja! Ventara ist vollständig offline-fähig. Nach dem ersten Login kannst du bis zu 7 Tage ohne Internetverbindung arbeiten. Alle Änderungen werden automatisch synchronisiert sobald du wieder online bist.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-3">
+          <button class="faq-question" aria-expanded="false">
+            Ist Ventara DSGVO-konform?
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Absolut. Wir verwenden keine Analytics, Tracker oder Werbenetzwerke. Alle Daten werden verschlüsselt in der EU gespeichert. Du kannst jederzeit alle deine Daten exportieren oder deinen Account vollständig löschen.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-4">
+          <button class="faq-question" aria-expanded="false">
+            Kann ich von der Free-Version auf Pro wechseln?
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Jederzeit! Du kannst in der App unter Einstellungen auf den Pro-Plan wechseln. Alle deine bestehenden Daten bleiben erhalten. Du kannst zwischen monatlicher (&euro;24,99) und jährlicher Zahlung (&euro;199, 33% Ersparnis) wählen.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-5">
+          <button class="faq-question" aria-expanded="false">
+            Gibt es die App auf Deutsch und Englisch?
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Ja, Ventara ist vollständig zweisprachig. Du kannst jederzeit zwischen Deutsch und Englisch wechseln — alle Texte, SMS-Vorlagen und Oberflächen passen sich sofort an.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question" aria-expanded="false">
+            Kann ich meine bestehenden Daten importieren?
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Ja, Ventara unterstützt den Import von Buchungsdaten per Excel-Datei (.xlsx). Du kannst damit einfach von einer bestehenden Lösung umziehen. Der Export funktioniert ebenfalls als Excel-Datei — perfekt für die Buchhaltung.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CTA BANNER ==================== -->
+  <section id="cta">
+    <div class="container">
+      <div class="cta-banner reveal">
+        <h2 class="section-title" style="color: #F1F5F9;">Bereit, dein Outdoor-Business<br>auf das nächste Level zu bringen?</h2>
+        <p class="section-subtitle" style="margin: 0 auto; color: #94A3B8;">
+          Lade Ventara jetzt kostenlos herunter und verwalte deine Buchungen wie ein Profi.
+        </p>
+
+        <div class="cta-stores">
+          <a href="#" class="store-badge" aria-label="Im App Store herunterladen">
+            <span class="store-icon" aria-hidden="true">&#63743;</span>
+            <div class="store-badge-text">
+              <small>Laden im</small>
+              App Store
+            </div>
+          </a>
+          <a href="#" class="store-badge" aria-label="Bei Google Play herunterladen">
+            <span class="store-icon" aria-hidden="true">&#9654;</span>
+            <div class="store-badge-text">
+              <small>Jetzt bei</small>
+              Google Play
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-brand">
+            <span class="logo-icon" aria-hidden="true">V</span>
+            Ventara
+          </a>
+          <p>Professionelle Buchungsverwaltung für Outdoor-Aktivitäten-Anbieter. DSGVO-konform, offline-fähig und zweisprachig.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Produkt</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Preise</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Rechtliches</h4>
+          <ul>
+            <li><a href="#">Datenschutz</a></li>
+            <li><a href="#">Nutzungsbedingungen</a></li>
+            <li><a href="#">Impressum</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Kontakt</h4>
+          <ul>
+            <li><a href="mailto:office@pielachtalballooning.at">E-Mail senden</a></li>
+            <li><a href="#">Support</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 Ventara. Alle Rechte vorbehalten.</span>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram">&#9737;</a>
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="YouTube">&#9654;</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // ---- Theme Toggle ----
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    function setTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      themeIcon.innerHTML = theme === 'dark' ? '\u263E' : '\u2600';
+      localStorage.setItem('ventara-theme', theme);
+      // Update meta theme-color for mobile browsers
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', theme === 'dark' ? '#060F18' : '#FAFBFC');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Load saved theme
+    const saved = localStorage.getItem('ventara-theme');
+    if (saved) setTheme(saved);
+
+    // ---- Navbar scroll ----
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ---- Mobile Nav ----
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileClose = document.getElementById('mobileClose');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileNav.classList.add('open');
+      mobileToggle.setAttribute('aria-expanded', 'true');
+    });
+
+    mobileClose.addEventListener('click', closeMobileNav);
+
+    function closeMobileNav() {
+      mobileNav.classList.remove('open');
+      mobileToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    // ---- Scroll Reveal ----
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // ---- FAQ Accordion ----
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        });
+
+        // Toggle current
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ---- Smooth scroll for anchor links ----
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ---- Keyboard navigation for FAQ ----
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
