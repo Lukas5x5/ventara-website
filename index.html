@@ -1301,6 +1301,385 @@
     }
 
     /* ============================================
+       DETAIL GRID (Booking Details, Data & Settings)
+       ============================================ */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .detail-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      transition: all var(--transition);
+    }
+
+    .detail-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .detail-icon {
+      font-size: 1.8rem;
+      margin-bottom: 14px;
+    }
+
+    .detail-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .detail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .detail-list li {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .detail-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    /* ============================================
+       DETAIL SPLIT (Communication, Calendar)
+       ============================================ */
+    .detail-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .detail-split-reverse {
+      direction: rtl;
+    }
+
+    .detail-split-reverse > * {
+      direction: ltr;
+    }
+
+    .detail-features {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .detail-feature {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .detail-feature-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      width: 36px;
+      text-align: center;
+    }
+
+    .detail-feature strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .detail-feature span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* SMS Preview */
+    .sms-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .sms-bubble {
+      padding: 14px 18px;
+      border-radius: 16px 16px 4px 16px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+      position: relative;
+    }
+
+    .sms-outgoing {
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.15);
+    }
+
+    .sms-weather {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.15);
+    }
+
+    .sms-reminder {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: rgba(245, 158, 11, 0.15);
+    }
+
+    .sms-sender {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .sms-weather .sms-sender { color: #ef4444; }
+    .sms-reminder .sms-sender { color: #f59e0b; }
+
+    .sms-time {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 6px;
+    }
+
+    /* Calendar Preview */
+    .calendar-preview {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .cal-header {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .cal-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      position: relative;
+    }
+
+    .cal-other { opacity: 0.3; }
+
+    .cal-today {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .cal-morning::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: calc(50% - 5px);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #06b6d4;
+    }
+
+    .cal-evening::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: calc(50% + 1px);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #f59e0b;
+    }
+
+    .cal-morning.cal-evening::after {
+      left: calc(50% + 1px);
+    }
+
+    .cal-morning.cal-evening::before {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: calc(50% - 5px);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #06b6d4;
+    }
+
+    .cal-blocked {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .cal-legend {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 14px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .cal-legend span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .cal-dot-morning { background: #06b6d4; }
+    .cal-dot-evening { background: #f59e0b; }
+    .cal-dot-blocked { background: #ef4444; }
+
+    /* ============================================
+       ACTIVITY TYPE CARDS
+       ============================================ */
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .activity-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .activity-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .activity-card-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+    }
+
+    .activity-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .activity-card-labels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .activity-card-labels span {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      border: 1px solid rgba(6, 182, 212, 0.12);
+    }
+
+    /* ============================================
+       DATA GRID (Data & Settings section)
+       ============================================ */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .data-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      transition: all var(--transition);
+    }
+
+    .data-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .data-card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 14px;
+    }
+
+    .data-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .data-card p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    /* ============================================
        RESPONSIVE
        ============================================ */
     /* ---- Tablet ---- */
@@ -1317,6 +1696,10 @@
 
       .features-grid { grid-template-columns: repeat(2, 1fr); }
       .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+      .detail-grid { grid-template-columns: repeat(2, 1fr); }
+      .activity-grid { grid-template-columns: repeat(2, 1fr); }
+      .data-grid { grid-template-columns: repeat(2, 1fr); }
+      .detail-split { gap: 40px; }
 
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -1365,12 +1748,40 @@
       .activities-bar .container::-webkit-scrollbar { display: none; }
       .activity-chip { padding: 8px 14px; font-size: 0.8rem; white-space: nowrap; flex-shrink: 0; }
 
-      /* Features: compact single column */
-      .features-grid { grid-template-columns: 1fr; gap: 12px; }
-      .feature-card { padding: 20px; border-radius: 16px; }
-      .feature-icon { width: 40px; height: 40px; font-size: 18px; margin-bottom: 12px; border-radius: 10px; }
-      .feature-card h3 { font-size: 1rem; margin-bottom: 6px; }
-      .feature-card p { font-size: 0.85rem; line-height: 1.5; }
+      /* Features: compact two columns */
+      .features-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .feature-card { padding: 18px; border-radius: 16px; }
+      .feature-icon { width: 36px; height: 36px; font-size: 16px; margin-bottom: 10px; border-radius: 10px; }
+      .feature-card h3 { font-size: 0.92rem; margin-bottom: 4px; }
+      .feature-card p { font-size: 0.8rem; line-height: 1.5; }
+
+      /* Detail grids: single column */
+      .detail-grid { grid-template-columns: 1fr; gap: 12px; }
+      .detail-card { padding: 20px; }
+      .detail-icon { font-size: 1.5rem; margin-bottom: 10px; }
+      .detail-card h3 { font-size: 0.95rem; }
+
+      /* Detail split: stack */
+      .detail-split { grid-template-columns: 1fr; gap: 32px; }
+      .detail-split-reverse { direction: ltr; }
+      .detail-features { margin-top: 20px; gap: 16px; }
+      .detail-feature-icon { font-size: 1.2rem; width: 30px; }
+      .sms-preview { padding: 16px; }
+      .sms-bubble { font-size: 0.78rem; padding: 12px 14px; }
+      .calendar-preview { padding: 16px; }
+
+      /* Activity grid: 2 columns */
+      .activity-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .activity-card { padding: 20px; }
+      .activity-card-emoji { font-size: 2rem; margin-bottom: 8px; }
+      .activity-card h3 { font-size: 0.95rem; margin-bottom: 8px; }
+      .activity-card-labels span { font-size: 0.65rem; padding: 3px 8px; }
+
+      /* Data grid */
+      .data-grid { grid-template-columns: 1fr; gap: 12px; }
+      .data-card { padding: 20px; }
+      .data-card-icon { font-size: 1.5rem; margin-bottom: 10px; }
+      .data-card h3 { font-size: 0.95rem; }
 
       /* Steps: compact single column, no line */
       .steps { grid-template-columns: 1fr; gap: 24px; }
@@ -1447,8 +1858,18 @@
       .section-label { font-size: 0.68rem; padding: 4px 10px; }
       .section-header { margin-bottom: 24px; }
 
-      .feature-card { padding: 16px; }
-      .feature-card p, .step p, .testimonial-text { font-size: 0.82rem; }
+      .feature-card { padding: 14px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card p, .step p, .testimonial-text, .data-card p, .detail-list li { font-size: 0.8rem; }
+
+      .activity-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .activity-card { padding: 16px; }
+      .activity-card-emoji { font-size: 1.6rem; }
+      .activity-card h3 { font-size: 0.85rem; }
+      .activity-card-labels span { font-size: 0.6rem; padding: 2px 6px; }
+
+      .detail-card { padding: 16px; }
+      .data-card { padding: 16px; }
 
       /* Footer compact */
       .footer-grid { grid-template-columns: 1fr; gap: 20px; }
@@ -1496,8 +1917,7 @@
 
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
-        <li><a href="#how-it-works">So funktioniert's</a></li>
-        <li><a href="#testimonials">Bewertungen</a></li>
+        <li><a href="#activity-types">Aktivitäten</a></li>
         <li><a href="#pricing">Preise</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
@@ -1518,8 +1938,9 @@
   <div class="mobile-nav" id="mobileNav" role="dialog" aria-label="Mobile Navigation">
     <button class="mobile-nav-close" id="mobileClose" aria-label="Menü schließen">&times;</button>
     <a href="#features" onclick="closeMobileNav()">Features</a>
-    <a href="#how-it-works" onclick="closeMobileNav()">So funktioniert's</a>
-    <a href="#testimonials" onclick="closeMobileNav()">Bewertungen</a>
+    <a href="#booking-details" onclick="closeMobileNav()">Buchungen</a>
+    <a href="#communication" onclick="closeMobileNav()">Kommunikation</a>
+    <a href="#activity-types" onclick="closeMobileNav()">Aktivitäten</a>
     <a href="#pricing" onclick="closeMobileNav()">Preise</a>
     <a href="#faq" onclick="closeMobileNav()">FAQ</a>
     <a href="#cta" class="btn btn-primary" onclick="closeMobileNav()" style="margin-top: 20px; justify-content: center;">Jetzt starten</a>
@@ -1653,7 +2074,7 @@
     </div>
   </div>
 
-  <!-- ==================== FEATURES ==================== -->
+  <!-- ==================== FEATURES OVERVIEW ==================== -->
   <section id="features">
     <div class="container">
       <div class="section-header reveal">
@@ -1668,50 +2089,437 @@
         <div class="feature-card reveal reveal-delay-1">
           <div class="feature-icon" aria-hidden="true">&#128197;</div>
           <h3>Kalender-Integration</h3>
-          <p>Automatische Synchronisation mit deinem Gerätekalender. Morgen- und Abendtermine, Ersatzdaten und wetterbedingte Stornierungen — alles auf einen Blick.</p>
+          <p>Automatische Synchronisation mit deinem Gerätekalender. Morgen- und Abendtermine, Ersatzdaten und Monatsübersicht mit Farbcodierung.</p>
         </div>
 
         <div class="feature-card reveal reveal-delay-2">
           <div class="feature-icon" aria-hidden="true">&#128101;</div>
           <h3>Kunden & Buchungen</h3>
-          <p>Vollständige Kundenverwaltung mit Kontaktdaten, Gutscheinen, Zahlungsstatus und Teilnehmerzahl. Buchungen archivieren und per Excel sichern.</p>
+          <p>Vollständige Kundenverwaltung mit Kontaktdaten, Teilnehmerzahl, VIP-Kennzeichnung, Notizen und Archivierung erledigter Buchungen.</p>
         </div>
 
         <div class="feature-card reveal reveal-delay-3">
           <div class="feature-icon" aria-hidden="true">&#127919;</div>
           <h3>Equipment & Guides</h3>
-          <p>Verwalte dein Equipment mit Kapazität und Farbcodierung. Weise Guides zu, berechne Sonnenzeiten und organisiere Startorte.</p>
+          <p>Equipment mit Kapazität und Farbcodierung verwalten. Guides zuweisen, Crew-Mitglieder organisieren und Startorte festlegen.</p>
         </div>
 
         <div class="feature-card reveal reveal-delay-1">
           <div class="feature-icon" aria-hidden="true">&#128172;</div>
           <h3>SMS & WhatsApp</h3>
-          <p>Versende Bestätigungen und Erinnerungen direkt aus der App. Anpassbare Vorlagen pro Aktivitätstyp und automatische Wetterabsagen.</p>
+          <p>Bestätigungen, Erinnerungen und Wetterabsagen direkt aus der App senden. Anpassbare Vorlagen pro Aktivitätstyp mit Platzhaltern.</p>
         </div>
 
         <div class="feature-card reveal reveal-delay-2">
-          <div class="feature-icon" aria-hidden="true">&#128274;</div>
-          <h3>DSGVO-konform</h3>
-          <p>Keine Tracker, keine Werbung, keine Analytics. Verschlüsselte Datenübertragung, EU-Hosting und vollständige Datenexport- und Löschmöglichkeit.</p>
+          <div class="feature-icon" aria-hidden="true">&#127873;</div>
+          <h3>Gutschein-System</h3>
+          <p>Mehrere Gutscheine pro Buchung, Teileinlösungen, pro-Person oder Fixbetrag. Automatische Restbar-Berechnung und Gutschein-Tracking.</p>
         </div>
 
         <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon" aria-hidden="true">&#9729;&#65039;</div>
+          <h3>Wetter-Stornierung</h3>
+          <p>Massen-SMS bei Schlechtwetter an alle betroffenen Kunden. Ersatztermine automatisch vorschlagen und Kalendereinträge aktualisieren.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon" aria-hidden="true">&#128200;</div>
+          <h3>Excel Export & Import</h3>
+          <p>Alle Buchungsdaten als XLSX exportieren — perfekt für die Buchhaltung. Bestehende Daten per Excel importieren und nahtlos umsteigen.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon" aria-hidden="true">&#128276;</div>
+          <h3>Push-Erinnerungen</h3>
+          <p>Automatische Erinnerungen 1–7 Tage vor dem Termin. Konfigurierbare Uhrzeit, SMS-Fallback wenn Push nicht zugestellt wird.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon" aria-hidden="true">&#128260;</div>
+          <h3>Buchungs-Transfer</h3>
+          <p>Buchungen per 8-stelligem Code an andere Nutzer übertragen. Transfer-Historie mit Status-Tracking für gesendete und empfangene Transfers.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon" aria-hidden="true">&#128274;</div>
+          <h3>DSGVO-konform</h3>
+          <p>Keine Tracker, keine Werbung, keine Analytics. EU-Hosting, verschlüsselte Übertragung. Daten exportieren oder Account vollständig löschen.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
           <div class="feature-icon" aria-hidden="true">&#128246;</div>
-          <h3>Offline-fähig</h3>
-          <p>Bis zu 7 Tage ohne Internetverbindung nutzbar. Automatische Synchronisation sobald du wieder online bist. Perfekt fürs Gelände.</p>
+          <h3>7 Tage Offline</h3>
+          <p>Vollständig offline arbeiten — bis zu 7 Tage ohne Internet. Automatische Synchronisation und Offline-Queue sobald du wieder online bist.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon" aria-hidden="true">&#127760;</div>
+          <h3>Zweisprachig DE/EN</h3>
+          <p>Komplette App auf Deutsch und Englisch. Jederzeit umschaltbar — alle Texte, SMS-Vorlagen und Labels passen sich sofort an.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEEP DIVE: BOOKING MANAGEMENT ==================== -->
+  <section id="booking-details" style="background: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Buchungsverwaltung</span>
+        <h2 class="section-title">Jede Buchung im Griff</h2>
+        <p class="section-subtitle">
+          Vom ersten Kundenkontakt bis zur Einlösung — alles an einem Ort.
+        </p>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card reveal reveal-delay-1">
+          <div class="detail-icon" aria-hidden="true">&#128100;</div>
+          <h3>Kundendaten</h3>
+          <ul class="detail-list">
+            <li>Name, Telefon, E-Mail</li>
+            <li>Adresse (Straße, PLZ, Ort)</li>
+            <li>Automatische Telefonnummer-Normalisierung (AT/DE)</li>
+            <li>Notizen pro Buchung</li>
+          </ul>
+        </div>
+
+        <div class="detail-card reveal reveal-delay-2">
+          <div class="detail-icon" aria-hidden="true">&#128197;</div>
+          <h3>Termin-Management</h3>
+          <ul class="detail-list">
+            <li>Haupttermin + 2 Ersatztermine</li>
+            <li>Morgen- oder Abendstart</li>
+            <li>Automatische Sonnenauf-/untergangszeiten</li>
+            <li>Gerätekalender-Synchronisation</li>
+          </ul>
+        </div>
+
+        <div class="detail-card reveal reveal-delay-3">
+          <div class="detail-icon" aria-hidden="true">&#128176;</div>
+          <h3>Zahlung & Gutscheine</h3>
+          <ul class="detail-list">
+            <li>Bar, Gutschein oder Kombination</li>
+            <li>Preise pro Erwachsener & Kind</li>
+            <li>Mehrere Gutscheine pro Buchung</li>
+            <li>Automatische Restbar-Berechnung</li>
+          </ul>
+        </div>
+
+        <div class="detail-card reveal reveal-delay-1">
+          <div class="detail-icon" aria-hidden="true">&#127919;</div>
+          <h3>Zuweisung & Kapazität</h3>
+          <ul class="detail-list">
+            <li>Equipment, Guide & Crew zuweisen</li>
+            <li>Auto-Zuweisung nach Kapazität</li>
+            <li>VIP-Buchungen (exklusive Ressource)</li>
+            <li>Farbcodierung für schnelle Übersicht</li>
+          </ul>
+        </div>
+
+        <div class="detail-card reveal reveal-delay-2">
+          <div class="detail-icon" aria-hidden="true">&#128269;</div>
+          <h3>Suche & Filter</h3>
+          <ul class="detail-list">
+            <li>Volltextsuche (Name, Datum, Mail, Telefon)</li>
+            <li>Quick-Filter: Bar, Gutschein, Spontan, Kein Datum</li>
+            <li>Aktiv- und Archiv-Ansicht</li>
+            <li>Anpassbare Filter-Buttons</li>
+          </ul>
+        </div>
+
+        <div class="detail-card reveal reveal-delay-3">
+          <div class="detail-icon" aria-hidden="true">&#9989;</div>
+          <h3>Einlösen & Archivieren</h3>
+          <ul class="detail-list">
+            <li>Buchungen als "eingelöst" markieren</li>
+            <li>Automatische Archivierung</li>
+            <li>Archiv-Suche und Wiederherstellen</li>
+            <li>Endgültig löschen aus dem Archiv</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEEP DIVE: COMMUNICATION ==================== -->
+  <section id="communication">
+    <div class="container">
+      <div class="detail-split reveal">
+        <div class="detail-split-content">
+          <span class="section-label">Kommunikation</span>
+          <h2 class="section-title">SMS, WhatsApp &<br>Push-Erinnerungen</h2>
+          <p class="section-subtitle">
+            Halte deine Kunden automatisch auf dem Laufenden — von der Bestätigung bis zur Wetterstornierung.
+          </p>
+
+          <div class="detail-features">
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#128172;</span>
+              <div>
+                <strong>3 SMS-Vorlagen</strong>
+                <span>Bestätigung, Erinnerung und Wetterabsage — pro Aktivitätstyp anpassbar mit Platzhaltern ({name}, {date}, {time}, {place}).</span>
+              </div>
+            </div>
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#9729;&#65039;</span>
+              <div>
+                <strong>Massen-Wetterabsage</strong>
+                <span>Alle Kunden eines Tages auf einmal informieren. Datum und Startzeit wählen, Kunden auswählen, SMS senden — fertig.</span>
+              </div>
+            </div>
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#128276;</span>
+              <div>
+                <strong>Automatische Erinnerungen</strong>
+                <span>Push-Benachrichtigungen 1–7 Tage vor dem Termin. Uhrzeit einstellbar, mit SMS-Fallback bei Nicht-Zustellung.</span>
+              </div>
+            </div>
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#128241;</span>
+              <div>
+                <strong>SMS oder WhatsApp</strong>
+                <span>Pro Nachrichtentyp wählbar: SMS oder WhatsApp. Eigene Signatur für alle Nachrichten konfigurierbar.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-split-visual">
+          <div class="sms-preview reveal">
+            <div class="sms-bubble sms-outgoing">
+              <div class="sms-sender">Ventara</div>
+              Hallo Fam. Huber! Ihre Buchung am 15.06. um 06:30 (Morgenstart) ist bestätigt. Treffpunkt: Wieselburg. Wir freuen uns! — Pielachtal Ballooning
+              <div class="sms-time">09:15</div>
+            </div>
+            <div class="sms-bubble sms-outgoing sms-weather">
+              <div class="sms-sender">Wetterabsage</div>
+              Leider müssen wir den Termin am 15.06. wetterbedingt absagen. Ihr Ersatztermin: 22.06. Morgenstart. Wir melden uns! — Pielachtal Ballooning
+              <div class="sms-time">18:30</div>
+            </div>
+            <div class="sms-bubble sms-outgoing sms-reminder">
+              <div class="sms-sender">Erinnerung</div>
+              Morgen ist es soweit! Treffpunkt 06:15 in Wieselburg. Bitte festes Schuhwerk. Wir freuen uns auf Sie!
+              <div class="sms-time">10:00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEEP DIVE: CALENDAR & SCHEDULING ==================== -->
+  <section id="calendar" style="background: var(--bg-secondary);">
+    <div class="container">
+      <div class="detail-split detail-split-reverse reveal">
+        <div class="detail-split-content">
+          <span class="section-label">Kalender</span>
+          <h2 class="section-title">Kalender-Sync &<br>Sonnenzeiten</h2>
+          <p class="section-subtitle">
+            Dein Gerätekalender wird automatisch mit allen Buchungen synchronisiert — inklusive detaillierter Notizen.
+          </p>
+
+          <div class="detail-features">
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#128197;</span>
+              <div>
+                <strong>Gerätekalender-Sync</strong>
+                <span>Neue Buchungen erscheinen automatisch in deinem iPhone- oder Android-Kalender mit allen Details.</span>
+              </div>
+            </div>
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#127749;</span>
+              <div>
+                <strong>Sonnenauf- & Untergangszeiten</strong>
+                <span>Automatische Berechnung für 5 österreichische Standorte oder eigene GPS-Koordinaten.</span>
+              </div>
+            </div>
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#128679;</span>
+              <div>
+                <strong>Blockierte Tage</strong>
+                <span>Ganztägige Kalendereinträge blockieren automatisch Tage im Mini-Kalender der Buchungsansicht.</span>
+              </div>
+            </div>
+            <div class="detail-feature">
+              <span class="detail-feature-icon" aria-hidden="true">&#128214;</span>
+              <div>
+                <strong>Detaillierte Kalender-Notizen</strong>
+                <span>Kundenname, Telefon, Teilnehmer, Guide, Equipment, Zahlungsstatus und Gutschein-Infos im Kalendereintrag.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-split-visual">
+          <div class="calendar-preview reveal">
+            <div class="cal-header">
+              <span>Juni 2026</span>
+            </div>
+            <div class="cal-weekdays">
+              <span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+            </div>
+            <div class="cal-days">
+              <span class="cal-day cal-other">26</span>
+              <span class="cal-day cal-other">27</span>
+              <span class="cal-day cal-other">28</span>
+              <span class="cal-day cal-other">29</span>
+              <span class="cal-day cal-other">30</span>
+              <span class="cal-day cal-other">31</span>
+              <span class="cal-day">1</span>
+              <span class="cal-day">2</span>
+              <span class="cal-day">3</span>
+              <span class="cal-day">4</span>
+              <span class="cal-day cal-blocked">5</span>
+              <span class="cal-day cal-morning">6</span>
+              <span class="cal-day cal-evening">7</span>
+              <span class="cal-day">8</span>
+              <span class="cal-day">9</span>
+              <span class="cal-day">10</span>
+              <span class="cal-day">11</span>
+              <span class="cal-day">12</span>
+              <span class="cal-day cal-morning">13</span>
+              <span class="cal-day cal-morning cal-evening">14</span>
+              <span class="cal-day cal-today">15</span>
+              <span class="cal-day">16</span>
+              <span class="cal-day">17</span>
+              <span class="cal-day">18</span>
+              <span class="cal-day">19</span>
+              <span class="cal-day cal-blocked">20</span>
+              <span class="cal-day cal-evening">21</span>
+              <span class="cal-day cal-morning">22</span>
+              <span class="cal-day">23</span>
+              <span class="cal-day">24</span>
+              <span class="cal-day">25</span>
+              <span class="cal-day">26</span>
+              <span class="cal-day">27</span>
+              <span class="cal-day cal-morning">28</span>
+              <span class="cal-day">29</span>
+              <span class="cal-day">30</span>
+            </div>
+            <div class="cal-legend">
+              <span><span class="cal-dot cal-dot-morning"></span> Morgen</span>
+              <span><span class="cal-dot cal-dot-evening"></span> Abend</span>
+              <span><span class="cal-dot cal-dot-blocked"></span> Blockiert</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEEP DIVE: ACTIVITY TYPES ==================== -->
+  <section id="activity-types">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">6 Aktivitätstypen</span>
+        <h2 class="section-title">Eine App. Jede Outdoor-Aktivität.</h2>
+        <p class="section-subtitle">
+          Wähle deinen Aktivitätstyp — alle Labels, Icons und SMS-Vorlagen passen sich automatisch an.
+        </p>
+      </div>
+
+      <div class="activity-grid">
+        <div class="activity-card reveal reveal-delay-1">
+          <div class="activity-card-emoji" aria-hidden="true">&#127880;</div>
+          <h3>Ballonfahrt</h3>
+          <div class="activity-card-labels">
+            <span>Ballon</span><span>Pilot</span><span>Verfolger</span><span>Passagiere</span>
+          </div>
+        </div>
+        <div class="activity-card reveal reveal-delay-2">
+          <div class="activity-card-emoji" aria-hidden="true">&#129666;</div>
+          <h3>Paragliding</h3>
+          <div class="activity-card-labels">
+            <span>Gleitschirm</span><span>Tandempilot</span><span>Assistent</span><span>Passagiere</span>
+          </div>
+        </div>
+        <div class="activity-card reveal reveal-delay-3">
+          <div class="activity-card-emoji" aria-hidden="true">&#128675;</div>
+          <h3>Rafting</h3>
+          <div class="activity-card-labels">
+            <span>Boot</span><span>Guide</span><span>Sicherungsposten</span><span>Plätze</span>
+          </div>
+        </div>
+        <div class="activity-card reveal reveal-delay-1">
+          <div class="activity-card-emoji" aria-hidden="true">&#129343;</div>
+          <h3>Tauchen</h3>
+          <div class="activity-card-labels">
+            <span>Tauchspot</span><span>Instructor</span><span>Buddy</span><span>Taucher</span>
+          </div>
+        </div>
+        <div class="activity-card reveal reveal-delay-2">
+          <div class="activity-card-emoji" aria-hidden="true">&#128014;</div>
+          <h3>Reiten</h3>
+          <div class="activity-card-labels">
+            <span>Pferd</span><span>Reitlehrer</span><span>Helfer</span><span>Reiter</span>
+          </div>
+        </div>
+        <div class="activity-card reveal reveal-delay-3">
+          <div class="activity-card-emoji" aria-hidden="true">&#127956;</div>
+          <h3>Sonstige</h3>
+          <div class="activity-card-labels">
+            <span>Equipment</span><span>Guide</span><span>Assistent</span><span>Teilnehmer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEEP DIVE: DATA & SETTINGS ==================== -->
+  <section id="data-settings" style="background: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Daten & Einstellungen</span>
+        <h2 class="section-title">Alles konfigurierbar</h2>
+        <p class="section-subtitle">
+          6 Einstellungs-Tabs, Excel-Datenaustausch und interaktives Tutorial für den Einstieg.
+        </p>
+      </div>
+
+      <div class="data-grid">
+        <div class="data-card reveal reveal-delay-1">
+          <div class="data-card-icon" aria-hidden="true">&#128200;</div>
+          <h3>Excel Export</h3>
+          <p>Alle Buchungen, Equipment, Guides und Crew als Multi-Sheet XLSX exportieren. Bilingual mit deutschen und englischen Spaltenheadern.</p>
+        </div>
+        <div class="data-card reveal reveal-delay-2">
+          <div class="data-card-icon" aria-hidden="true">&#128229;</div>
+          <h3>Excel Import</h3>
+          <p>Buchungsdaten per XLSX importieren. Flexible Header-Erkennung (DE/EN), automatische Validierung und Zwei-Schritt-Bestätigung.</p>
+        </div>
+        <div class="data-card reveal reveal-delay-3">
+          <div class="data-card-icon" aria-hidden="true">&#128260;</div>
+          <h3>Buchungs-Transfer</h3>
+          <p>Buchungen per 8-stelligem Code an andere Nutzer senden. Empfänger kann annehmen oder ablehnen. Vollständige Transfer-Historie.</p>
+        </div>
+        <div class="data-card reveal reveal-delay-1">
+          <div class="data-card-icon" aria-hidden="true">&#128218;</div>
+          <h3>Interaktives Tutorial</h3>
+          <p>3-teilige geführte Tour: App-Übersicht, Einstellungen und Buchungsformular. Spotlight-Badges für jeden Schritt, jederzeit neustartbar.</p>
+        </div>
+        <div class="data-card reveal reveal-delay-2">
+          <div class="data-card-icon" aria-hidden="true">&#9881;&#65039;</div>
+          <h3>6 Einstellungs-Tabs</h3>
+          <p>Allgemein, Buchungen, Stammdaten, Kommunikation, Daten und Account. Alles was du brauchst — vom SMS-Template bis zur Startort-Konfiguration.</p>
+        </div>
+        <div class="data-card reveal reveal-delay-3">
+          <div class="data-card-icon" aria-hidden="true">&#128272;</div>
+          <h3>Account & Sicherheit</h3>
+          <p>Passwort ändern, Account löschen (DSGVO), Daten exportieren. Verschlüsselung in Transit, EU-Hosting mit Supabase.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ==================== HOW IT WORKS ==================== -->
-  <section id="how-it-works" style="background: var(--bg-secondary);">
+  <section id="how-it-works">
     <div class="container">
       <div class="section-header reveal">
         <span class="section-label">So funktioniert's</span>
         <h2 class="section-title">In 3 Schritten startklar</h2>
         <p class="section-subtitle">
-          Kein kompliziertes Setup. Lade die App herunter, wähle deine Aktivität und starte sofort mit der Verwaltung.
+          Kein kompliziertes Setup. Lade die App herunter, wähle deine Aktivität und starte sofort.
         </p>
       </div>
 
@@ -1720,28 +2528,28 @@
           <div class="step-number">1</div>
           <div class="step-icon" aria-hidden="true">&#128241;</div>
           <h3>App herunterladen</h3>
-          <p>Lade Ventara kostenlos aus dem App Store oder Google Play herunter. Erstelle in Sekunden einen Account.</p>
+          <p>Lade Ventara kostenlos aus dem App Store oder Google Play herunter. Account erstellen dauert Sekunden.</p>
         </div>
 
         <div class="step reveal reveal-delay-2">
           <div class="step-number">2</div>
           <div class="step-icon" aria-hidden="true">&#127968;</div>
           <h3>Aktivität wählen</h3>
-          <p>Wähle deinen Aktivitätstyp — Ballonfahrt, Paragliding, Rafting, Tauchen, Reiten oder Sonstiges. Alle Labels passen sich automatisch an.</p>
+          <p>Wähle deinen Aktivitätstyp — alle Labels, Icons und SMS-Vorlagen passen sich automatisch an.</p>
         </div>
 
         <div class="step reveal reveal-delay-3">
           <div class="step-number">3</div>
           <div class="step-icon" aria-hidden="true">&#128640;</div>
           <h3>Loslegen</h3>
-          <p>Erfasse Equipment, Guides und Buchungen. Versende SMS-Bestätigungen und synchronisiere mit deinem Kalender.</p>
+          <p>Equipment, Guides und Buchungen erfassen. SMS senden, Kalender synchronisieren — alles sofort einsatzbereit.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ==================== TESTIMONIALS ==================== -->
-  <section id="testimonials">
+  <section id="testimonials" style="background: var(--bg-secondary);">
     <div class="container">
       <div class="section-header reveal">
         <span class="section-label">Bewertungen</span>
@@ -1986,9 +2794,9 @@
           <h4>Produkt</h4>
           <ul>
             <li><a href="#features">Features</a></li>
+            <li><a href="#activity-types">Aktivitätstypen</a></li>
             <li><a href="#pricing">Preise</a></li>
             <li><a href="#faq">FAQ</a></li>
-            <li><a href="#">Changelog</a></li>
           </ul>
         </div>
 
